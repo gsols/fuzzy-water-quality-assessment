@@ -58,10 +58,17 @@ Date: <date>
                 </div>
 
                 <p class="interpretation">{{ result.interpretation }}</p>
+                <h2>Output Membership Plot</h2>
                 <img
                     class="output-plot"
                     src="{{ result.plot_url }}"
                     alt="Output membership function plot showing the computed score"
+                >
+                <h2>All Membership Functions</h2>
+                <img
+                    class="output-plot overview-plot"
+                    src="{{ result.overview_plot_url }}"
+                    alt="Combined membership function plots for all inputs and the output"
                 >
             </section>
         {% endif %}

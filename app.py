@@ -11,14 +11,18 @@ from flask import Flask, render_template, request
 try:
     from .fuzzy_config import FUZZY_CONFIG
     from .fuzzy_engine import evaluate
-    from .visualize import plot_output_with_score
+    from .visualize import (
+        plot_combined_membership_functions,
+        plot_output_with_score,
+    )
 except ImportError:
     from fuzzy_config import FUZZY_CONFIG
     from fuzzy_engine import evaluate
-    from visualize import plot_output_with_score
+    from visualize import plot_combined_membership_functions, plot_output_with_score
 
 
-app = Flask(__name__)
+# index.html is stored at the repository root, while assets stay in static/.
+app = Flask(__name__, template_folder=".")
 
 
 INTERPRETATIONS = {
@@ -89,12 +93,17 @@ def index():
             plot_path = os.path.join(app.static_folder, plot_name)
             plot_output_with_score(score, plot_path)
 
+            # Generate a combined overview plot showing every fuzzy variable.
+            overview_name = "all_membership_functions.png"
+            plot_combined_membership_functions(app.static_folder)
+
             result = {
                 "score": score,
                 "label": label,
                 "badge_class": label.lower(),
                 "interpretation": INTERPRETATIONS[label],
                 "plot_url": f"static/{plot_name}",
+                "overview_plot_url": f"static/{overview_name}",
             }
         except (ValueError, KeyError):
             error = "Please enter valid numeric values for all parameters."

@@ -47,8 +47,7 @@ The system returns a numeric Water Quality Index and a classification label:
 ├── visualize.py
 ├── test_scenarios.py
 ├── app.py
-├── templates/
-│   └── index.html
+├── index.html
 └── static/
     └── style.css
 ```
@@ -60,7 +59,7 @@ The system returns a numeric Water Quality Index and a classification label:
 - `visualize.py` generates membership function plots for all six inputs and the WQI output.
 - `test_scenarios.py` runs five required scenarios and prints a pass/fail table.
 - `app.py` provides the Flask web interface.
-- `templates/index.html` contains the single-page form and result section.
+- `index.html` contains the single-page form and result section.
 - `static/style.css` styles the web application and result badges.
 
 ## Requirements
@@ -127,7 +126,7 @@ Run:
 python visualize.py
 ```
 
-This creates a `membership_plots/` directory with one plot for each input parameter and one plot for the output WQI variable.
+This creates a `membership_plots/` directory with one plot for each input parameter, one plot for the output WQI variable, and one combined overview plot named `all_membership_functions.png`.
 
 ## Run the Web App
 

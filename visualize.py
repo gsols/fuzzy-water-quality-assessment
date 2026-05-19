@@ -41,6 +41,22 @@ def _axis_title(key):
     return f"{label} ({unit})" if unit else label
 
 
+def _plot_variable_on_axis(axis, key, variable):
+    """Draw all membership sets for one variable on a Matplotlib axis."""
+    for set_name in FUZZY_CONFIG[key]["sets"]:
+        membership = variable[set_name].mf
+        axis.plot(variable.universe, membership, linewidth=1.8,
+                  label=get_display_set_name(set_name))
+        axis.fill_between(variable.universe, 0, membership, alpha=0.16)
+
+    axis.set_title(_axis_title(key), fontsize=11, fontweight="bold")
+    axis.set_xlabel(_axis_title(key), fontsize=9)
+    axis.set_ylabel("Membership", fontsize=9)
+    axis.set_ylim(-0.02, 1.05)
+    axis.grid(True, alpha=0.3)
+    axis.legend(loc="best", fontsize=7)
+
+
 def plot_membership_functions(save_dir="membership_plots"):
     """Save one filled membership-function plot for every configured variable."""
     variables, water_quality = get_fuzzy_variables()
@@ -76,6 +92,33 @@ def plot_membership_functions(save_dir="membership_plots"):
     return saved_paths
 
 
+def plot_combined_membership_functions(save_dir="membership_plots"):
+    """Save one overview figure containing all input and output memberships."""
+    variables, water_quality = get_fuzzy_variables()
+    all_variables = {**variables, OUTPUT_KEY: water_quality}
+    os.makedirs(save_dir, exist_ok=True)
+
+    figure, axes = plt.subplots(4, 2, figsize=(14, 16))
+    flat_axes = axes.flatten()
+
+    # Each parameter keeps its own x-axis because units and scales differ.
+    for axis, key in zip(flat_axes, PLOT_ORDER):
+        _plot_variable_on_axis(axis, key, all_variables[key])
+
+    # Hide the unused eighth subplot while keeping the grid tidy.
+    for axis in flat_axes[len(PLOT_ORDER):]:
+        axis.axis("off")
+
+    figure.suptitle("Surface Water Quality Fuzzy Membership Functions",
+                    fontsize=16, fontweight="bold")
+    figure.tight_layout(rect=[0, 0, 1, 0.97])
+
+    path = os.path.join(save_dir, "all_membership_functions.png")
+    figure.savefig(path, dpi=150)
+    plt.close(figure)
+    return path
+
+
 def plot_output_with_score(score, save_path):
     """Save the output membership plot with a vertical line at the score."""
     _variables, water_quality = get_fuzzy_variables()
@@ -105,6 +148,7 @@ def plot_output_with_score(score, save_path):
 
 if __name__ == "__main__":
     paths = plot_membership_functions()
+    paths.append(plot_combined_membership_functions())
     print("Saved membership plots:")
     for path in paths:
         print(f"- {path}")

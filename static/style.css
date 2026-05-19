@@ -150,6 +150,12 @@ button:hover {
     font-weight: 800;
 }
 
+h2 {
+    margin: 24px 0 12px;
+    font-size: 1.15rem;
+    line-height: 1.25;
+}
+
 .badge {
     border-radius: 999px;
     color: #ffffff;
@@ -193,6 +199,10 @@ button:hover {
     border: 1px solid var(--line);
     border-radius: 8px;
     background: #ffffff;
+}
+
+.overview-plot {
+    max-height: none;
 }
 
 @media (max-width: 760px) {
