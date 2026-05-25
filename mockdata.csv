@@ -1,11 +1,16 @@
 name,do,ph,turbidity,nutrients,temp,tds,expected
-Clean River,9.5,7.2,2.0,2.0,24.0,120.0,Excellent
-Urban River,6.2,7.5,6.8,4.5,26.0,320.0,Good
-Agricultural Canal,5.5,7.8,8.5,6.8,28.0,450.0,Moderate
-Eutrophic Lake,4.3,8.2,12.0,9.5,30.5,600.0,Poor
-Industrial Effluent Zone,3.1,6.4,18.5,7.2,32.0,980.0,Very Poor
-Coastal Estuary,7.0,8.1,3.0,3.5,27.0,1500.0,Good
-Rain-Fed Pond,6.8,6.8,4.2,2.8,25.0,210.0,Good
-Deforested Watershed River,5.8,7.0,9.0,5.5,29.0,380.0,Moderate
-Pristine Glacier Runoff,10.2,6.7,0.8,0.5,12.0,60.0,Excellent
-Mountain Stream,8.8,6.9,1.5,1.2,18.5,90.0,Excellent
+Pristine Spring,10.5,7.0,1.0,1.0,22.0,80.0,Excellent
+Clear Mountain Stream,9.0,7.2,1.5,1.5,20.0,100.0,Excellent
+Ideal River,10.0,7.1,2.0,2.0,23.0,120.0,Excellent
+Healthy River,7.5,7.2,4.0,3.0,24.0,200.0,Good
+Cool Clear Stream,8.0,7.0,3.5,4.0,16.0,150.0,Good
+Low-Impact Lake,7.0,7.5,5.0,5.0,25.0,280.0,Good
+Urban Stream,6.0,7.0,8.0,8.0,25.0,380.0,Acceptable
+Moderately Loaded River,5.5,7.1,9.0,9.0,26.0,420.0,Acceptable
+Suburban Canal,6.2,7.0,7.5,7.0,24.0,350.0,Acceptable
+Agricultural Drain,4.5,6.8,22.0,20.0,28.0,550.0,Fair
+Warm Low-DO River,3.5,7.0,15.0,12.0,31.0,400.0,Fair
+Turbid Runoff,4.8,7.0,28.0,18.0,28.0,620.0,Fair
+Anoxic Pond,1.0,5.5,60.0,40.0,34.0,1000.0,Poor
+Severely Polluted Lake,1.5,5.0,70.0,38.0,33.0,950.0,Poor
+Nutrient Overloaded,2.0,8.8,50.0,45.0,30.0,900.0,Poor

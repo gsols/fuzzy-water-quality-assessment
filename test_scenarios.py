@@ -1,8 +1,11 @@
 """
-Purpose: Run required water quality assessment scenarios and print results.
+Purpose: Run water quality assessment scenarios from mockdata.csv and print results.
 Author: <author>
 Date: <date>
 """
+
+import csv
+import os
 
 try:
     from .fuzzy_engine import evaluate
@@ -10,19 +13,21 @@ except ImportError:
     from fuzzy_engine import evaluate
 
 
-SCENARIOS = [
-    ("Clean River", 9.5, 7.2, 2.0, 2.0, 24.0, 120.0, "Excellent"),
-    ("Polluted Lake", 2.1, 5.5, 45.0, 28.0, 31.0, 850.0, "Poor"),
-    ("Average Stream", 6.5, 7.0, 10.0, 10.0, 26.0, 300.0, "Acceptable"),
-    ("Agricultural Runoff", 5.0, 6.8, 20.0, 25.0, 27.0, 400.0, "Fair"),
-    ("Pristine Source", 11.0, 7.4, 1.0, 1.0, 20.0, 80.0, "Excellent"),
-]
+CSV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mockdata.csv")
+
+
+def load_scenarios(path=CSV_PATH):
+    """Read scenarios from the CSV file and return a list of row dicts."""
+    with open(path, newline="") as f:
+        return list(csv.DictReader(f))
 
 
 def run_scenarios():
-    """Evaluate all required scenarios and print a formatted results table."""
+    """Evaluate all scenarios from mockdata.csv and print a formatted results table."""
+    scenarios = load_scenarios()
+
     header = (
-        f"{'Scenario':<22}"
+        f"{'Scenario':<30}"
         f"{'Score':>10}"
         f"{'Result':>14}"
         f"{'Expected':>14}"
@@ -31,16 +36,28 @@ def run_scenarios():
     print(header)
     print("-" * len(header))
 
-    for name, do, ph, turbidity, nutrients, temp, tds, expected in SCENARIOS:
-        score, label = evaluate(do, ph, turbidity, nutrients, temp, tds)
-        status = "PASS" if label == expected else "FAIL"
-        print(
-            f"{name:<22}"
-            f"{score:>10.2f}"
-            f"{label:>14}"
-            f"{expected:>14}"
-            f"{status:>10}"
-        )
+    for row in scenarios:
+        name = row["name"]
+        expected = row["expected"]
+        try:
+            score, label = evaluate(
+                float(row["do"]),
+                float(row["ph"]),
+                float(row["turbidity"]),
+                float(row["nutrients"]),
+                float(row["temp"]),
+                float(row["tds"]),
+            )
+            status = "PASS" if label == expected else "FAIL"
+            print(
+                f"{name:<30}"
+                f"{score:>10.2f}"
+                f"{label:>14}"
+                f"{expected:>14}"
+                f"{status:>10}"
+            )
+        except Exception as exc:
+            print(f"{name:<30}{'ERROR':>10}  ({exc})")
 
 
 if __name__ == "__main__":
