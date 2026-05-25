@@ -67,14 +67,7 @@ PLOT_ORDER = [
     "nutrients", "temperature", "tds", OUTPUT_KEY,
 ]
 
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
 LEFT_W = 300  # fixed left panel width
-
-
-def _save_figures(fig_output, fig_combined):
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    fig_output.savefig(os.path.join(OUTPUT_DIR, "output_score.png"), dpi=150)
-    fig_combined.savefig(os.path.join(OUTPUT_DIR, "all_membership_functions.png"), dpi=150)
 
 
 def _build_output_figure(score):
@@ -413,8 +406,6 @@ class WaterQualityApp(ctk.CTk):
         ctk.CTkFrame(right, fg_color="transparent", height=24).grid(
             row=1, column=0, sticky="ew"
         )
-
-        _save_figures(fig1, fig2)
 
 
 if __name__ == "__main__":
