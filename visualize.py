@@ -10,9 +10,6 @@ import os
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/water_quality_fuzzy_matplotlib")
 
 import matplotlib
-
-matplotlib.use("Agg")
-
 import matplotlib.pyplot as plt
 
 try:
