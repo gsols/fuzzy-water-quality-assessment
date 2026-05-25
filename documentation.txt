@@ -1,0 +1,512 @@
+================================================================================
+  SURFACE WATER QUALITY ASSESSMENT SYSTEM
+  Complete User Guide
+================================================================================
+
+WHAT THIS SYSTEM DOES
+----------------------
+This application uses a Mamdani Fuzzy Inference System to assess the quality
+of surface water (rivers, lakes, reservoirs). You enter six water measurement
+values and the system returns a Water Quality Index (WQI) score from 0 to 100
+along with a label: Poor, Fair, Acceptable, Good, or Excellent.
+
+The app also shows you charts (membership function plots) that visualize how
+each measurement contributes to the final score.
+
+--------------------------------------------------------------------------------
+SECTION 1: INSTALLING PYTHON
+--------------------------------------------------------------------------------
+
+You need Python 3.9 or newer. Check if you already have it by opening a
+terminal (see below) and typing:
+
+    python --version
+    or
+    python3 --version
+
+If Python is not installed, download it from https://www.python.org/downloads/
+and install version 3.11 or 3.12 (recommended).
+
+  HOW TO OPEN A TERMINAL
+  -----------------------
+  macOS   : Press Command+Space, type "Terminal", press Enter.
+  Linux   : Press Ctrl+Alt+T, or search "Terminal" in your app menu.
+  Windows : Press Windows+R, type "cmd", press Enter.
+            (Alternatively, search "PowerShell" in the Start menu.)
+
+  WINDOWS INSTALLER TIP
+  ---------------------
+  During the Python installer on Windows, check the box that says
+  "Add Python to PATH" before clicking Install. This is required for
+  the commands below to work.
+
+--------------------------------------------------------------------------------
+SECTION 2: NAVIGATING TO THE PROJECT FOLDER
+--------------------------------------------------------------------------------
+
+All commands below must be run from inside the project folder. Replace the
+example path with wherever you actually saved the project.
+
+  macOS / Linux:
+    cd /path/to/fuzzy-water-quality-assessment
+
+  Windows (Command Prompt):
+    cd C:\path\to\fuzzy-water-quality-assessment
+
+  Windows (PowerShell):
+    cd "C:\path\to\fuzzy-water-quality-assessment"
+
+To confirm you are in the right place, run:
+    ls          (macOS/Linux)
+    dir         (Windows)
+
+You should see files like: app.py, fuzzy_config.py, fuzzy_engine.py
+
+--------------------------------------------------------------------------------
+SECTION 3: CREATING A VIRTUAL ENVIRONMENT (RECOMMENDED)
+--------------------------------------------------------------------------------
+
+A virtual environment keeps this project's packages separate from your system
+Python and prevents version conflicts.
+
+  macOS / Linux:
+    python3 -m venv venv
+    source venv/bin/activate
+
+  Windows (Command Prompt):
+    python -m venv venv
+    venv\Scripts\activate
+
+  Windows (PowerShell):
+    python -m venv venv
+    .\venv\Scripts\Activate.ps1
+
+After activation your terminal prompt will show (venv) at the beginning.
+Run "deactivate" at any time to leave the virtual environment.
+
+--------------------------------------------------------------------------------
+SECTION 4: INSTALLING DEPENDENCIES
+--------------------------------------------------------------------------------
+
+  LINUX ONLY — INSTALL TKINTER FIRST (macOS and Windows: skip this step)
+  ------------------------------------------------------------------------
+  macOS and Windows include Tkinter automatically with the Python installer.
+  On Linux it must be installed separately as a system package before running
+  pip. Choose the command that matches your distribution:
+
+    Debian / Ubuntu / Linux Mint:
+      sudo apt-get install python3-tk
+
+    Fedora / RHEL / CentOS:
+      sudo dnf install python3-tkinter
+
+    Arch Linux / Manjaro:
+      sudo pacman -S tk
+
+  You can verify it worked by running:
+      python3 -c "import tkinter; print('Tkinter OK')"
+  If it prints "Tkinter OK", you are ready to continue.
+
+All required packages are listed in requirements.txt. Install them with one
+command:
+
+  macOS / Linux:
+    pip install -r requirements.txt
+
+  Windows:
+    pip install -r requirements.txt
+
+This installs the following packages automatically:
+  - customtkinter   : modern desktop GUI toolkit
+  - matplotlib      : charts and membership function plots
+  - numpy           : numerical computation
+  - scikit-fuzzy    : Mamdani fuzzy inference engine
+  - scipy           : scientific math utilities
+  - pillow          : image handling for the GUI
+  - networkx        : graph support used internally by scikit-fuzzy
+
+Installation typically takes 1–3 minutes. You only need to do this once.
+
+  COMMON ISSUES
+  -------------
+  "pip is not recognized" (Windows): Try "python -m pip install -r requirements.txt"
+  Permission error (Linux/macOS):    Add "--user" flag: pip install --user -r requirements.txt
+  Slow network:                      Each package may take a moment; wait for the prompt.
+
+--------------------------------------------------------------------------------
+SECTION 5: RUNNING THE APPLICATION
+--------------------------------------------------------------------------------
+
+From the project folder (with your virtual environment active), run:
+
+  macOS / Linux:
+    python app.py
+
+  Windows:
+    python app.py
+
+The desktop window titled "Surface Water Quality Assessment" will open.
+
+  WHAT YOU WILL SEE
+  -----------------
+  Left panel  : Six input fields, one for each water quality parameter.
+  Right panel : Results appear here after you click "Assess Water Quality".
+  Button      : Green "Assess Water Quality" button at the bottom of the
+                left panel. Click it after filling all six fields.
+
+  ENTERING VALUES
+  ---------------
+  Fill in all six fields. Each field shows its valid measurement range as a
+  hint below the input box. Use decimal numbers (e.g. 7.4, not 7,4).
+
+  Parameter fields and their ranges:
+    1. Dissolved Oxygen (DO)         0 – 14  mg/L
+    2. pH                            0 – 14  (no unit)
+    3. Turbidity                     0 – 100 NTU
+    4. Nutrients                     0 – 50  mg/L
+    5. Water Temperature             0 – 40  deg C
+    6. Total Dissolved Solids (TDS)  0 – 1200 mg/L
+
+  READING THE RESULTS
+  -------------------
+  After clicking "Assess Water Quality", the right panel shows:
+
+    - Water Quality Index (WQI) score: a number from 0 to 100
+    - Quality label and color badge:
+        Poor        (red)    : 0  – 24   Severely degraded; urgent action needed
+        Fair        (orange) : 25 – 44   Stressed; monitor or treat before sensitive use
+        Acceptable  (yellow) : 45 – 64   Generally usable with moderate limitations
+        Good        (green)  : 65 – 79   Healthy with only minor concerns
+        Excellent   (dark green) : 80–100  Very clean; strongly supports aquatic health
+
+    - Interpretation text: a plain-English description of what the score means
+
+    - Output Membership Plot: shows where your WQI score lands on the
+      output fuzzy sets (a vertical dashed line marks the exact score).
+
+    - All Membership Functions chart: shows all six input variables and the
+      output variable as overlapping curve charts (see Section 6 for details).
+
+  ERROR MESSAGES
+  --------------
+  If you leave a field blank or enter a non-numeric value, a red alert box
+  appears at the top of the left panel explaining which field is missing.
+  Correct the value and click "Assess Water Quality" again.
+
+--------------------------------------------------------------------------------
+SECTION 6: VISUALIZING MEMBERSHIP FUNCTION PLOTS (STANDALONE)
+--------------------------------------------------------------------------------
+
+You can generate and save all membership function charts as PNG image files
+without opening the main app window. This is useful for reports or previewing
+how the fuzzy sets are configured.
+
+Run from the project folder:
+
+  macOS / Linux:
+    python visualize.py
+
+  Windows:
+    python visualize.py
+
+This saves PNG files into a folder called "membership_plots/" inside the
+project directory. The following files are created:
+
+  dissolved_oxygen_membership.png   – Dissolved Oxygen fuzzy sets
+  ph_membership.png                 – pH fuzzy sets
+  turbidity_membership.png          – Turbidity fuzzy sets
+  nutrients_membership.png          – Nutrients fuzzy sets
+  temperature_membership.png        – Water Temperature fuzzy sets
+  tds_membership.png                – Total Dissolved Solids fuzzy sets
+  water_quality_membership.png      – Water Quality Index output fuzzy sets
+  all_membership_functions.png      – All variables in one combined overview chart
+
+  HOW TO READ A MEMBERSHIP PLOT
+  ------------------------------
+  Each chart shows overlapping colored curves. The x-axis is the measurement
+  value (e.g. mg/L, NTU). The y-axis (Membership Degree) ranges from 0 to 1
+  and represents how strongly a value belongs to each fuzzy category.
+
+  For example, on the Dissolved Oxygen chart:
+    - A value of 6 mg/L might be 0.5 "moderate" and 0.5 "high" at the same
+      time — this is normal in fuzzy logic.
+    - A value of 11 mg/L would be 100% "excellent" (degree = 1.0).
+
+  The shape of each curve is a trapezoid defined by four points [a, b, c, d]:
+    - From a to b: membership rises from 0 to 1
+    - From b to c: membership stays at 1 (the "flat top")
+    - From c to d: membership falls from 1 to 0
+
+--------------------------------------------------------------------------------
+SECTION 7: UNDERSTANDING THE FUZZY RULES
+--------------------------------------------------------------------------------
+
+The system uses 18 rules to translate input measurements into a water quality
+score. Rules combine multiple parameters using AND (all conditions must match)
+and OR (any condition can match). Here is a plain-English summary:
+
+  EXCELLENT quality rules:
+    1. DO=Excellent AND pH=Neutral AND Turbidity=Clear AND Nutrients=Low
+       AND Temperature=Optimal AND TDS=Fresh
+    2. DO=Excellent AND Turbidity=Clear AND Nutrients=Low
+       AND Temperature=Cool or Optimal AND pH=Neutral or Slightly Alkaline
+    3. DO=Excellent AND pH=Neutral or Slightly Alkaline AND Turbidity=Clear
+       AND Nutrients=Low AND TDS=Fresh
+
+  GOOD quality rules:
+    4. DO=High AND pH=Neutral or Slightly Alkaline
+       AND Turbidity=Clear or Slightly Cloudy AND Nutrients=Low or Moderate
+    5. DO=Excellent AND Turbidity=Slightly Cloudy AND Nutrients=Low
+    6. Temperature=Cool AND DO=High AND Turbidity=Clear
+
+  ACCEPTABLE quality rules:
+    7. DO=Moderate AND pH=Neutral AND Turbidity=Slightly Cloudy
+       AND Nutrients=Moderate AND Temperature=Optimal AND TDS=Fresh or Moderate
+    8. DO=High AND pH=Neutral AND Turbidity=Slightly Cloudy
+       AND Nutrients=Moderate AND Temperature=Optimal AND TDS=Moderate
+
+  FAIR quality rules:
+    9. Temperature=Hot AND DO=Low
+   10. Temperature=Warm AND DO=Low
+   11. DO=Moderate AND pH=Slightly Acidic or Neutral
+       AND Turbidity=Cloudy AND Nutrients=High
+   12. TDS=High AND DO=Moderate AND pH=Neutral AND Nutrients=Moderate
+       AND Temperature=Optimal or Warm
+   13. TDS=Excessive OR Turbidity=Highly Turbid
+
+  POOR quality rules:
+   14. DO=Very Low OR Nutrients=Excessive
+   15. DO=Low AND pH=Acidic
+   16. Turbidity=Highly Turbid AND Nutrients=High
+   17. Turbidity=Highly Turbid AND Nutrients=Excessive
+   18. pH=Alkaline AND (DO=Low OR Nutrients=High)
+
+  KEY INSIGHT
+  -----------
+  Rules 14–18 are "critical risk" rules. Even one severely bad parameter
+  (e.g. nearly zero dissolved oxygen) can override otherwise decent readings
+  and push the score toward Poor. Conversely, rules 1–3 require ALL six
+  parameters to be simultaneously excellent.
+
+  RULE WEIGHTS
+  ------------
+  Some rules have a strength (weight) based on how important each parameter
+  is. The default weights are:
+    Dissolved Oxygen  : 0.25  (highest importance)
+    pH                : 0.20
+    Turbidity         : 0.18
+    Nutrients         : 0.15
+    Temperature       : 0.12
+    Total Dissolved Solids (TDS) : 0.10
+
+  A higher weight means that parameter has more influence on the final score
+  when that parameter's rule fires. You can change weights in fuzzy_config.py
+  (see Section 8).
+
+--------------------------------------------------------------------------------
+SECTION 8: TWEAKING THE CONFIGURATION (fuzzy_config.py)
+--------------------------------------------------------------------------------
+
+All numerical thresholds, category boundaries, and parameter weights are in
+one file: fuzzy_config.py. You do not need to understand Python to edit it —
+just change the numbers.
+
+Open fuzzy_config.py with any text editor (Notepad, TextEdit, VS Code, etc.).
+
+  FILE STRUCTURE
+  --------------
+  The file contains one large dictionary called FUZZY_CONFIG. Each parameter
+  (dissolved_oxygen, ph, turbidity, etc.) has its own block that looks like:
+
+    "dissolved_oxygen": {
+        "label": "Dissolved Oxygen",
+        "unit": "mg/L",
+        "universe": [0, 14, 0.1],        <- measurement range and step
+        "weight": 0.25,                   <- importance (0.0 to 1.0)
+        "sets": {
+            "very_low":  [0,  0,  1,  2], <- trapezoid: [a, b, c, d]
+            "low":       [1,  2,  3,  5],
+            "moderate":  [4,  5,  6,  7],
+            "high":      [6,  7,  9, 10],
+            "excellent": [8, 10, 14, 14],
+        },
+    },
+
+  WHAT EACH FIELD MEANS
+  ---------------------
+  "universe": [start, stop, step]
+      The full range of possible measurement values.
+      Example: [0, 14, 0.1] means values from 0 to 14 in steps of 0.1.
+      Change "stop" if your measurements can go higher than the default.
+
+  "weight": a decimal number between 0.0 and 1.0
+      How much this parameter contributes to the final score in weighted rules.
+      Higher = more influence. The weights do not need to add up to 1.0.
+
+  "sets": dictionary of fuzzy categories, each with four numbers [a, b, c, d]
+      These define the shape of the trapezoidal membership curve:
+        a = where membership starts rising from 0
+        b = where membership reaches 1 (left edge of flat top)
+        c = where membership starts falling from 1 (right edge of flat top)
+        d = where membership reaches 0 again
+      Rules: a <= b <= c <= d. If a == b, the left side is vertical (sharp rise).
+             If c == d, the right side is vertical (sharp fall).
+
+  EXAMPLE: RAISING THE "EXCELLENT" DO THRESHOLD
+  -----------------------------------------------
+  Suppose you want to require at least 9 mg/L (instead of 8) before considering
+  dissolved oxygen "excellent". Change:
+
+    Before:  "excellent": [8, 10, 14, 14],
+    After:   "excellent": [9, 10, 14, 14],
+
+  This shifts the left-side rise of the "excellent" trapezoid one unit to the
+  right, making the system harder to satisfy for excellent classification.
+
+  EXAMPLE: INCREASING WEIGHT OF TDS
+  -----------------------------------
+  If your water body is especially sensitive to dissolved solids, increase
+  TDS weight from 0.10 to 0.20:
+
+    Before:  "weight": 0.10,
+    After:   "weight": 0.20,
+
+  EXAMPLE: CHANGING THE OUTPUT SCORE BOUNDARIES
+  -----------------------------------------------
+  The "water_quality" section controls the output score ranges:
+
+    "poor":       [0,  0,  15, 25],   <- score 0–25 is Poor
+    "fair":       [20, 30, 35, 45],   <- score 25–45 is Fair
+    "acceptable": [40, 50, 55, 65],   <- score 45–65 is Acceptable
+    "good":       [60, 70, 75, 80],   <- score 65–80 is Good
+    "excellent":  [75, 85, 100, 100], <- score 80–100 is Excellent
+
+  To make the system stricter (harder to get "Excellent"), shift the
+  "excellent" set to the right:
+
+    Before:  "excellent": [75, 85, 100, 100],
+    After:   "excellent": [85, 92, 100, 100],
+
+  SAFETY RULES FOR EDITING
+  -------------------------
+  1. Always keep a <= b <= c <= d for every set.
+  2. Do not delete any set name — the fuzzy rules reference them by name.
+  3. Do not change the set names (e.g. "very_low", "excellent") unless you
+     also update fuzzy_engine.py (advanced users only).
+  4. Keep the "universe" range wide enough to cover all your [a, b, c, d]
+     values. If a value in "sets" exceeds the universe stop, it will be
+     silently clamped.
+  5. Save the file and restart the app (close and reopen it) after any changes
+     for the new settings to take effect.
+
+--------------------------------------------------------------------------------
+SECTION 9: RUNNING TEST SCENARIOS
+--------------------------------------------------------------------------------
+
+The project includes a test file with sample water readings to verify that the
+system produces expected results. This is useful after changing fuzzy_config.py
+to confirm the system still behaves correctly.
+
+  macOS / Linux:
+    python test_scenarios.py
+
+  Windows:
+    python test_scenarios.py
+
+The test output prints each scenario's inputs and the resulting WQI score and
+quality label. No installation of extra tools is required.
+
+--------------------------------------------------------------------------------
+SECTION 10: QUICK REFERENCE — PARAMETER GUIDELINES
+--------------------------------------------------------------------------------
+
+These are general water quality reference values. Your region's standards
+may differ.
+
+  DISSOLVED OXYGEN (DO) — ideal for aquatic life: 7–10 mg/L
+    < 2 mg/L  : Hypoxic — lethal to most fish
+    2–5 mg/L  : Stressed — limited aquatic diversity
+    5–7 mg/L  : Moderate — acceptable for some organisms
+    7–9 mg/L  : Good — supports healthy aquatic communities
+    > 9 mg/L  : Excellent — clean, well-oxygenated water
+
+  pH — neutral is 7.0
+    < 6.0     : Acidic — corrosive, toxic to many species
+    6.0–6.8   : Slightly acidic — acceptable range
+    6.5–7.5   : Neutral — ideal for most aquatic life
+    7.5–8.5   : Slightly to moderately alkaline — generally acceptable
+    > 8.5     : Alkaline — can stress sensitive organisms
+
+  TURBIDITY — how cloudy/murky the water is
+    0–5 NTU   : Clear — very good visibility
+    5–15 NTU  : Slightly cloudy — acceptable for most uses
+    15–30 NTU : Cloudy — concerns for drinking water treatment
+    > 30 NTU  : Highly turbid — blocks sunlight, harms aquatic plants
+
+  NUTRIENTS (Nitrates/Phosphates combined)
+    0–5 mg/L  : Low — healthy oligotrophic conditions
+    5–15 mg/L : Moderate — some enrichment, monitor for algae
+    15–30 mg/L: High — eutrophication risk, algal blooms possible
+    > 30 mg/L : Excessive — severe eutrophication, major intervention needed
+
+  TEMPERATURE
+    < 15 deg C : Cold — suitable for cold-water species (trout, salmon)
+    15–22 deg C: Cool — good general aquatic health
+    22–28 deg C: Optimal — supports diverse aquatic communities
+    28–33 deg C: Warm — stress for many species, lower DO capacity
+    > 33 deg C : Hot — critical thermal stress
+
+  TOTAL DISSOLVED SOLIDS (TDS)
+    < 300 mg/L  : Fresh — good drinking/irrigation water
+    300–600 mg/L: Moderate — acceptable for most uses
+    600–1000 mg/L: High — tastes salty, limited agricultural use
+    > 1000 mg/L : Excessive — unsuitable for most freshwater organisms
+
+--------------------------------------------------------------------------------
+SECTION 11: TROUBLESHOOTING
+--------------------------------------------------------------------------------
+
+  APP WINDOW DOES NOT OPEN
+    - Make sure you are in the project folder before running python app.py
+    - Confirm dependencies are installed: pip list | grep customtkinter
+    - On Linux, you may need Tkinter: sudo apt-get install python3-tk
+
+  "ModuleNotFoundError: No module named 'customtkinter'" (or similar)
+    - Your virtual environment is not active, or dependencies were not installed.
+    - Activate the virtual environment (Section 3) and run:
+      pip install -r requirements.txt
+
+  PLOTS DO NOT APPEAR IN THE APP
+    - This can happen if matplotlib backend is missing.
+    - On Linux, install: sudo apt-get install python3-tk python3-matplotlib
+
+  MEMBERSHIP PLOTS LOOK WRONG AFTER EDITING fuzzy_config.py
+    - Check that a <= b <= c <= d for every set you changed.
+    - Check that all values are within the "universe" [start, stop] range.
+    - Restart the app to reload the configuration.
+
+  HIGH CPU / SLOW FIRST RUN
+    - The fuzzy system is compiled on the first run. A brief pause (2–5 seconds)
+      is normal. Subsequent assessments are faster.
+
+  WINDOWS: "Execution of scripts is disabled" (PowerShell)
+    - Run: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+    - Then retry activating the virtual environment.
+
+--------------------------------------------------------------------------------
+SECTION 12: FILE REFERENCE
+--------------------------------------------------------------------------------
+
+  app.py             Main application window. Run this to start the GUI.
+  fuzzy_engine.py    Core fuzzy logic: rules, scoring, label classification.
+  fuzzy_config.py    All configuration: ranges, categories, weights.
+                     Edit this file to tune the system (see Section 8).
+  visualize.py       Standalone script to export membership plots as PNGs.
+  test_scenarios.py  Sample water readings for verifying system behavior.
+  requirements.txt   Python package list for pip installation.
+  mockdata.csv       Sample data used by test_scenarios.py.
+  membership_plots/  Folder created by visualize.py to store exported PNGs.
+
+================================================================================
+END OF DOCUMENTATION
+================================================================================
