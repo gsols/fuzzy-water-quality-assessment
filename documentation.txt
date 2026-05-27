@@ -88,12 +88,16 @@ Run "deactivate" at any time to leave the virtual environment.
 SECTION 4: INSTALLING DEPENDENCIES
 --------------------------------------------------------------------------------
 
-  LINUX ONLY — INSTALL TKINTER FIRST (macOS and Windows: skip this step)
+  LINUX & macOS — INSTALL TKINTER FIRST (Windows: skip this step)
   ------------------------------------------------------------------------
-  macOS and Windows include Tkinter automatically with the Python installer.
-  On Linux it must be installed separately as a system package before running
-  pip. Choose the command that matches your distribution:
+  Windows includes Tkinter automatically with the Python installer. On Linux
+  and some macOS setups, it may need to be installed separately as a system
+  package before running pip.
 
+  macOS (using Homebrew):
+    brew install python-tk
+
+  Linux: Choose the command that matches your distribution:
     Debian / Ubuntu / Linux Mint:
       sudo apt-get install python3-tk
 
@@ -469,7 +473,7 @@ SECTION 11: TROUBLESHOOTING
   APP WINDOW DOES NOT OPEN
     - Make sure you are in the project folder before running python app.py
     - Confirm dependencies are installed: pip list | grep customtkinter
-    - On Linux, you may need Tkinter: sudo apt-get install python3-tk
+    - On Linux/macOS, you may need Tkinter: sudo apt-get install python3-tk (Linux) or brew install python-tk (macOS)
 
   "ModuleNotFoundError: No module named 'customtkinter'" (or similar)
     - Your virtual environment is not active, or dependencies were not installed.
@@ -478,7 +482,7 @@ SECTION 11: TROUBLESHOOTING
 
   PLOTS DO NOT APPEAR IN THE APP
     - This can happen if matplotlib backend is missing.
-    - On Linux, install: sudo apt-get install python3-tk python3-matplotlib
+    - On Linux/macOS, install system Tkinter package (see Section 4).
 
   MEMBERSHIP PLOTS LOOK WRONG AFTER EDITING fuzzy_config.py
     - Check that a <= b <= c <= d for every set you changed.
