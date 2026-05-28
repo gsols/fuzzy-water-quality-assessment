@@ -17,26 +17,26 @@ The assessment design is based on environmental water quality concerns aligned w
 
 ## Input Parameters
 
-| Parameter | Unit | Weight |
-| --- | --- | ---: |
-| Dissolved Oxygen (DO) | mg/L | 25% |
-| pH | none | 20% |
-| Turbidity | NTU | 18% |
-| Nutrients | mg/L | 15% |
-| Water Temperature | deg C | 12% |
-| Total Dissolved Solids (TDS) | mg/L | 10% |
+| Parameter                    | Unit  | Weight |
+| ---------------------------- | ----- | -----: |
+| Dissolved Oxygen (DO)        | mg/L  |    25% |
+| pH                           | none  |    20% |
+| Turbidity                    | NTU   |    18% |
+| Nutrients                    | mg/L  |    15% |
+| Water Temperature            | deg C |    12% |
+| Total Dissolved Solids (TDS) | mg/L  |    10% |
 
 ## Output Labels
 
 The system returns a numeric Water Quality Index and a classification label:
 
-| Score Range | Label |
-| --- | --- |
-| `< 25` | Poor |
-| `< 45` | Fair |
-| `< 65` | Acceptable |
-| `< 80` | Good |
-| `>= 80` | Excellent |
+| Score Range | Label      |
+| ----------- | ---------- |
+| `< 25`      | Poor       |
+| `< 45`      | Fair       |
+| `< 65`      | Acceptable |
+| `< 80`      | Good       |
+| `>= 80`     | Excellent  |
 
 ## Project Structure
 
@@ -109,11 +109,21 @@ Expected output:
 ```text
 Scenario                   Score        Result      Expected    Status
 ----------------------------------------------------------------------
-Clean River                82.11     Excellent     Excellent      PASS
-Polluted Lake              20.97          Poor          Poor      PASS
-Average Stream             60.54    Acceptable    Acceptable      PASS
-Agricultural Runoff        32.50          Fair          Fair      PASS
-Pristine Source            89.37     Excellent     Excellent      PASS
+Pristine Spring                    89.79     Excellent     Excellent      PASS
+Clear Mountain Stream              80.35     Excellent     Excellent      PASS
+Ideal River                        89.37     Excellent     Excellent      PASS
+Healthy River                      70.58          Good          Good      PASS
+Cool Clear Stream                  70.82          Good          Good      PASS
+Low-Impact Lake                    70.58          Good          Good      PASS
+Urban Stream                       52.50    Acceptable    Acceptable      PASS
+Moderately Loaded River            52.50    Acceptable    Acceptable      PASS
+Suburban Canal                     56.07    Acceptable    Acceptable      PASS
+Agricultural Drain                 32.50          Fair          Fair      PASS
+Warm Low-DO River                  32.50          Fair          Fair      PASS
+Turbid Runoff                      30.85          Fair          Fair      PASS
+Anoxic Pond                        20.22          Poor          Poor      PASS
+Severely Polluted Lake             20.22          Poor          Poor      PASS
+Nutrient Overloaded                21.61          Poor          Poor      PASS
 ```
 
 Scores may vary slightly if membership functions or rules are adjusted.
